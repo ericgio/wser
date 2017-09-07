@@ -2,6 +2,9 @@ import * as d3 from 'd3';
 import React from 'react';
 import {findDOMNode} from 'react-dom';
 
+import Axis from './Axis';
+import Line from './Line';
+
 const MARGIN = {top: 20, right: 80, bottom: 30, left: 50};
 
 function getInnerHeight(height, margin) {
@@ -18,86 +21,77 @@ function translate(x, y) {
 
 class Chart extends React.Component {
 
-  componentDidMount() {
-    this._draw();
-  }
-
   render() {
-    const {height, width} = this.props;
+    const {cities, data, height, width} = this.props;
+
+    const x = d3.scaleTime()
+      .domain(d3.extent(data, d => d.date))
+      .range([0, getInnerWidth(width, MARGIN)]);
+
+    const y = d3.scaleLinear()
+      .domain([
+        d3.min(cities, c => d3.min(c.values, d => d.temperature)),
+        d3.max(cities, c => d3.max(c.values, d => d.temperature)),
+      ])
+      .range([getInnerHeight(height, MARGIN), 0]);
+
+    const z = d3.scaleOrdinal(d3.schemeCategory10)
+      .domain(cities.map(c => c.id));
 
     return (
       <svg height={height} width={width}>
         <g
           ref={instance => this._instance = instance}
           transform={translate(MARGIN.left, MARGIN.top)}>
+          <Axis
+            className="x-axis"
+            orient="bottom"
+            scale={x}
+            transform={translate(0, getInnerHeight(height, MARGIN))}
+          />
+          <Axis
+            className="y-axis"
+            orient="left"
+            scale={y}
+            tickFormat={temperature => `${temperature}ºF`}>
+            <text
+              dy="0.71em"
+              fill="#000"
+              transform="rotate(-90)"
+              y={6}>
+              Temperature, ºF
+            </text>
+          </Axis>
+          {cities.map(city => this._renderCityLine(city, x, y, z))}
         </g>
       </svg>
     );
   }
 
-  _draw() {
+  _renderCityLine = (city, x, y, z) => {
     const {cities, data, height, width} = this.props;
+    const last = city.values[city.values.length - 1];
 
-    const g = d3.select(findDOMNode(this._instance));
-    const innerHeight = getInnerHeight(height, MARGIN);
-    const innerWidth = getInnerWidth(width, MARGIN);
-
-    const x = d3.scaleTime().range([0, innerWidth]);
-    const y = d3.scaleLinear().range([innerHeight, 0]);
-    const z = d3.scaleOrdinal(d3.schemeCategory10);
-
-    const line = d3.line()
-      .x(d => x(d.date))
-      .y(d => y(d.temperature));
-
-    x.domain(d3.extent(data, d => d.date));
-
-    y.domain([
-      d3.min(cities, c => d3.min(c.values, d => d.temperature)),
-      d3.max(cities, c => d3.max(c.values, d => d.temperature)),
-    ]);
-
-    z.domain(cities.map(c => c.id));
-
-    g.append('g')
-      .attr('class', 'axis axis--x')
-      .attr('transform', translate(0, innerHeight))
-      .call(d3.axisBottom(x));
-
-    g.append('g')
-        .attr('class', 'axis axis--y')
-        .call(d3.axisLeft(y))
-      .append('text')
-        .attr('transform', 'rotate(-90)')
-        .attr('y', 6)
-        .attr('dy', '0.71em')
-        .attr('fill', '#000')
-        .text('Temperature, ºF');
-
-    const city = g.selectAll('.city')
-      .data(cities)
-      .enter().append('g')
-        .attr('class', 'city');
-
-    city
-      .append('path')
-      .attr('class', 'line')
-      .attr('d', d => line(d.values))
-      .style('stroke', d => z(d.id));
-
-    city
-      .append('text')
-      .datum(d => ({
-        id: d.id,
-        value: d.values[d.values.length - 1]
-      }))
-      .attr('transform', d => (
-        translate(x(d.value.date), y(d.value.temperature))
-      ))
-      .attr('x', 3)
-      .attr('dy', '0.35em')
-      .style('font', '10px sans-serif')
-      .text(d => d.id);
+    return (
+      <g className="city" key={city.id}>
+        <Line
+          curve={d3.curveBasis}
+          data={city.values}
+          style={{stroke: z(city.id)}}
+          x={d => x(d.date)}
+          y={d => y(d.temperature)}
+        />
+        <text
+          dy="0.35em"
+          style={{
+            font: '10px sans-serif',
+          }}
+          transform={translate(x(last.date), y(last.temperature))}
+          x={3}>
+          {city.id}
+        </text>
+      </g>
+    );
   }
 }
 
