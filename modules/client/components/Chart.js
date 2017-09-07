@@ -1,6 +1,5 @@
 import * as d3 from 'd3';
 import React from 'react';
-import {findDOMNode} from 'react-dom';
 
 import Axis from './Axis';
 import Line from './Line';
@@ -69,7 +68,6 @@ class Chart extends React.Component {
   }
 
   _renderCityLine = (city, x, y, z) => {
-    const {cities, data, height, width} = this.props;
     const last = city.values[city.values.length - 1];
 
     return (
