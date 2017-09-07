@@ -1,4 +1,7 @@
-stats.json
+**/.DS_Store
+
 node_modules
 public/assets
 lib
+
+stats.json
