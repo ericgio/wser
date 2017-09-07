@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import React from 'react';
 
-import Chart from './Chart';
+import DataChart from './DataChart';
 
 import data from '../data/data.tsv';
 
@@ -31,7 +31,7 @@ class Home extends React.Component {
       }));
 
     return (
-      <Chart
+      <DataChart
         cities={cities}
         data={converted}
         height={500}

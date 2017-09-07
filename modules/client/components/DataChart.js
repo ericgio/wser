@@ -1,24 +1,11 @@
 import * as d3 from 'd3';
+import {Axis, Chart, Line} from 'r-d3';
+import {getInnerHeight, getInnerWidth, translate} from 'r-d3/lib/utils';
 import React from 'react';
-
-import Axis from './Axis';
-import Line from './Line';
 
 const MARGIN = {top: 20, right: 80, bottom: 30, left: 50};
 
-function getInnerHeight(height, margin) {
-  return height - margin.top - margin.bottom;
-}
-
-function getInnerWidth(width, margin) {
-  return width - margin.left - margin.right;
-}
-
-function translate(x, y) {
-  return `translate(${x}, ${y})`;
-}
-
-class Chart extends React.Component {
+class DataChart extends React.Component {
 
   render() {
     const {cities, data, height, width} = this.props;
@@ -38,36 +25,34 @@ class Chart extends React.Component {
       .domain(cities.map(c => c.id));
 
     return (
-      <svg height={height} width={width}>
-        <g
-          ref={instance => this._instance = instance}
-          transform={translate(MARGIN.left, MARGIN.top)}>
-          <Axis
-            className="x-axis"
-            orient="bottom"
-            scale={x}
-            transform={translate(0, getInnerHeight(height, MARGIN))}
-          />
-          <Axis
-            className="y-axis"
-            orient="left"
-            scale={y}
-            tickFormat={temperature => `${temperature}ºF`}>
-            <text
-              dy="0.71em"
-              fill="#000"
-              transform="rotate(-90)"
-              y={6}>
-              Temperature, ºF
-            </text>
-          </Axis>
-          {cities.map(city => this._renderCityLine(city, x, y, z))}
-        </g>
-      </svg>
+      <Chart height={height} width={width} margin={MARGIN}>
+        <Axis
+          className="x-axis"
+          orient="bottom"
+          scale={x}
+          ticks={10}
+          transform={translate(0, getInnerHeight(height, MARGIN))}
+        />
+        <Axis
+          className="y-axis"
+          orient="left"
+          scale={y}
+          tickFormat={temperature => `${temperature}ºF`}
+          ticks={10}>
+          <text
+            dy="0.71em"
+            fill="#000"
+            transform="rotate(-90)"
+            y={6}>
+            Temperature, ºF
+          </text>
+        </Axis>
+        {cities.map(city => this._renderLine(city, x, y, z))}
+      </Chart>
     );
   }
 
-  _renderCityLine = (city, x, y, z) => {
+  _renderLine = (city, x, y, z) => {
     const last = city.values[city.values.length - 1];
 
     return (
@@ -93,4 +78,4 @@ class Chart extends React.Component {
   }
 }
 
-export default Chart;
+export default DataChart;
