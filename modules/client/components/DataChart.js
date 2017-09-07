@@ -25,7 +25,7 @@ class DataChart extends React.Component {
       .domain(cities.map(c => c.id));
 
     return (
-      <Chart height={height} width={width} margin={MARGIN}>
+      <Chart height={height} margin={MARGIN} width={width}>
         <Axis
           className="x-axis"
           orient="bottom"
