@@ -10,7 +10,7 @@ class MainPage extends React.Component {
   }
 
   static defaultProps = {
-    title: 'WSER',
+    title: 'WSER Data',
     webpackManifest: {},
     styles: [],
     scripts: [],

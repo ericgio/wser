@@ -52,6 +52,15 @@ module.exports = {
           ],
         }),
       },
+      {
+        test: /\.tsv$/,
+        use: {
+          loader: 'dsv-loader',
+          query: {
+            delimiter: '\t',
+          },
+        },
+      },
     ],
   },
 
