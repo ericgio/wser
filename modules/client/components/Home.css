@@ -3,8 +3,49 @@ body {
   font: 16px Helvetica, sans-serif;
 }
 
+.app-page {
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.app-toolbar {
+}
+
+.app-chart {
+  flex: 1;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
 .line {
   fill: none;
   stroke: steelblue;
+  stroke-opacity: 0.5;
   stroke-width: 1px;
+}
+.line:hover {
+  cursor: pointer;
+  stroke-opacity: 1;
+}
+
+.runner .line {
+  stroke: #bbb;
+}
+.runner .line:hover {
+  stroke: #34ace4;
+}
+
+.silver-buckle-cutoff {
+  stroke: #dd0447;
+  stroke-dasharray: 4, 1;
 }

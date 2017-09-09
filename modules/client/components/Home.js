@@ -1,43 +1,62 @@
 import * as d3 from 'd3';
 import React from 'react';
+import {findDOMNode} from 'react-dom';
 
-import DataChart from './DataChart';
-
-import data from '../data/data.tsv';
+import SplitsChart from './SplitsChart';
 
 import './Home.css';
 
+const PADDING = 20;
+
 class Home extends React.Component {
+  state = {
+    filter: '',
+    height: 0,
+    width: 0,
+  };
+
+  componentDidMount() {
+    this._handleResize();
+    window.addEventListener('resize', this._handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._handleResize);
+  }
 
   render() {
-    const parseTime = d3.timeParse('%Y%m%d');
-
-    const converted = data.map((d, _, columns) => {
-      d.date = parseTime(d.date);
-      for (var i = 1, n = columns.length, c; i < n; ++i) {
-        d[c = columns[i]] = +d[c];
-      }
-      return d;
-    });
-
-    const cities = data.columns
-      .slice(1)
-      .map(id => ({
-        id: id,
-        values: converted.map(d => ({
-          date: d.date,
-          temperature: d[id],
-        })),
-      }));
-
     return (
-      <DataChart
-        cities={cities}
-        data={converted}
-        height={500}
-        width={960}
-      />
+      <div
+        className="app-page"
+        style={{
+          padding: `${PADDING}px`,
+        }}>
+        <div className="app-toolbar" ref={t => this._toolbar = t}>
+          <div>
+            <label>Filter runner name: </label>
+            <input onChange={this._handleFilter} />
+          </div>
+        </div>
+        <div className="app-chart" ref={c => this._chart = c}>
+          <SplitsChart {...this.state} />
+        </div>
+      </div>
     );
+  }
+
+  _handleFilter = e => {
+    this.setState({filter: e.target.value});
+  }
+
+  _handleResize = () => {
+    const chartNode = findDOMNode(this._chart);
+    const parentNode = findDOMNode(this);
+    const toolbarNode = findDOMNode(this._toolbar);
+
+    this.setState({
+      height: parentNode.offsetHeight - toolbarNode.offsetHeight - PADDING * 2,
+      width: chartNode.offsetWidth,
+    });
   }
 }
 
