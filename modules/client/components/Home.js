@@ -32,29 +32,29 @@ class Home extends React.Component {
     return (
       <div className="app-page">
         <div
-          className="app-toolbar"
+          className="app-toolbar form-inline"
           ref={t => this._toolbar = t}
           style={{
             padding: `${PADDING}px`,
           }}>
-          <Form inline>
-            <FormGroup>
-              <ControlLabel>Year</ControlLabel>
-              <FormControl
-                componentClass="select"
-                name="year"
-                onChange={this._handleChange}>
-                {Object.keys(AID_STATIONS).map(year => (
-                  <option key={year} value={year}>{year}</option>
-                ))}
-              </FormControl>
-            </FormGroup>
-            <FormGroup>
-              <ControlLabel>Runner Name</ControlLabel>
-              <FormControl name="search" onChange={this._handleChange} />
-            </FormGroup>
-            <FormGroup>
-              <ControlLabel>Gender</ControlLabel>
+          <FormGroup>
+            <ControlLabel>Year</ControlLabel>
+            <FormControl
+              componentClass="select"
+              name="year"
+              onChange={this._handleChange}>
+              {Object.keys(AID_STATIONS).map(year => (
+                <option key={year} value={year}>{year}</option>
+              ))}
+            </FormControl>
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>Runner Name</ControlLabel>
+            <FormControl name="search" onChange={this._handleChange} />
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>Gender</ControlLabel>
+            <div className="gender-radios">
               {['All', 'Male', 'Female'].map(type => (
                 <Radio
                   checked={this.state.gender === type}
@@ -66,8 +66,8 @@ class Home extends React.Component {
                   {type}
                 </Radio>
               ))}
-            </FormGroup>
-          </Form>
+            </div>
+          </FormGroup>
         </div>
         <div
           className="app-chart"

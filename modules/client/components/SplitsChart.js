@@ -33,6 +33,8 @@ class SplitsChart extends React.Component {
       .domain([TIME_MIN, TIME_MAX])
       .range([innerHeight, 0]);
 
+    const yTickValues = [0, 6, 12, 18, 24, 30].map(t => t * SEC_PER_HR);
+
     return (
       <Chart
         height={height}
@@ -43,16 +45,23 @@ class SplitsChart extends React.Component {
           orient="bottom"
           scale={x}
           tickFormat={distance => distance.toFixed(1)}
+          tickSize={5}
           tickValues={AID_STATIONS[year].map(d => d.distance)}
           transform={translate(0, innerHeight)}
+        />
+        <Axis
+          className="y-axis-background"
+          orient="right"
+          scale={y}
+          tickSize={innerWidth}
+          tickValues={yTickValues}
         />
         <Axis
           className="y-axis"
           orient="left"
           scale={y}
           tickFormat={seconds => secondsToTime(seconds)}
-          ticks={30}
-          tickValues={[0, 6, 12, 18, 24, 30].map(t => t * SEC_PER_HR)}
+          tickValues={yTickValues}
         />
         <Line
           className="silver-buckle-cutoff"

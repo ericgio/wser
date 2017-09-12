@@ -17,7 +17,7 @@ body {
   background-color: #f5f5f5;
 }
 
-.app-toolbar .form-inline .control-label {
+.app-toolbar.form-inline .control-label {
   color: #aaa;
   display: block;
   font-size: 11px;
@@ -31,6 +31,11 @@ body {
   vertical-align: top;
 }
 
+.gender-radios {
+  display: inline-block;
+  vertical-align: -webkit-baseline-middle;
+}
+
 .app-chart {
   flex: 1;
 }
@@ -38,29 +43,33 @@ body {
 .axis path,
 .axis line {
   fill: none;
-  stroke: #000;
+  stroke: #e5e5e5;
   shape-rendering: crispEdges;
+}
+
+.y-axis-background text {
+  display: none;
 }
 
 .line {
   fill: none;
-  stroke: steelblue;
   stroke-opacity: 0.5;
   stroke-width: 1px;
 }
-.line:hover {
-  cursor: pointer;
-  stroke-opacity: 1;
-}
 
 .runner .line {
-  stroke: #bbb;
-}
-.runner .line:hover {
   stroke: #34ace4;
+  stroke-opacity: 0.2;
+}
+
+.line:hover,
+.runner .line:hover {
+  cursor: pointer;
+  stroke-opacity: 1;
 }
 
 .silver-buckle-cutoff {
   stroke: #dd0447;
   stroke-dasharray: 4, 1;
+  stroke-opacity: 1;
 }
