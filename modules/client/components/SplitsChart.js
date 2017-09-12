@@ -12,6 +12,10 @@ import AID_STATIONS from '../../constants/aidStations';
 
 const DISTANCE_MAX = 100.2;
 const DISTANCE_MIN = 0;
+const GENDER = {
+  FEMALE: 'F',
+  MALE: 'M',
+};
 const SEC_PER_HR = 3600;
 const SILVER_BUCKLE = 24 * SEC_PER_HR;
 const TIME_MAX = 30 * SEC_PER_HR;
@@ -93,8 +97,11 @@ class SplitsChart extends React.Component {
     );
   }
 
+  /**
+   * Progressively filter out data.
+   */
   _isFiltered = row => {
-    const {gender, search} = this.props;
+    const {finishType, gender, search} = this.props;
     const searchString = search.toLowerCase();
     const name = `${row.firstName} ${row.lastName}`.toLowerCase();
 
@@ -103,17 +110,45 @@ class SplitsChart extends React.Component {
     }
 
     switch (gender) {
-      case 'All':
-        return false;
       case 'Male':
-        return row.gender !== 'M';
+        if (row.gender !== GENDER.MALE) {
+          return true;
+        }
+        break;
       case 'Female':
-        return row.gender !== 'F';
+        if (row.gender !== GENDER.FEMALE) {
+          return true;
+        }
+        break;
     }
+
+    const {all, dnf, finisher, silverbuckle, topten} = finishType;
+
+    if (
+      all ||
+      (dnf && !row.finishTime) ||
+      (finisher && row.finishTime) ||
+      (silverbuckle && !!row.finishTime && row.finishTime < SILVER_BUCKLE) ||
+      (topten && (
+        (row.gender === GENDER.MALE && row.overallPlace <= 10) ||
+        (row.gender === GENDER.FEMALE && row.overallPlace <= 36)
+      ))
+    ) {
+      return false;
+    }
+
+    return true;
   }
 }
 
 SplitsChart.propTypes = {
+  finishType: PropTypes.shape({
+    all: PropTypes.bool.isRequired,
+    dnf: PropTypes.bool.isRequired,
+    finisher: PropTypes.bool.isRequired,
+    silverbuckle: PropTypes.bool.isRequired,
+    topten: PropTypes.bool.isRequired,
+  }).isRequired,
   gender: PropTypes.string.isRequired,
   height: PropTypes.number.isRequired,
   margin: PropTypes.shape({

@@ -1,6 +1,6 @@
 import React from 'react';
 import {findDOMNode} from 'react-dom';
-import {ControlLabel, Form, FormControl, FormGroup, Radio} from 'react-bootstrap';
+import {Checkbox, ControlLabel, FormControl, FormGroup, Radio} from 'react-bootstrap';
 
 import SplitsChart from './SplitsChart';
 
@@ -8,16 +8,24 @@ import AID_STATIONS from '../../constants/aidStations';
 
 import './Home.css';
 
+const INITIAL_STATE = {
+  finishType: {
+    all: true,
+    dnf: false,
+    finisher: false,
+    silverbuckle: false,
+    topten: false,
+  },
+  gender: 'All',
+  height: 0,
+  search: '',
+  width: 0,
+  year: '2017',
+};
 const PADDING = 15;
 
 class Home extends React.Component {
-  state = {
-    gender: 'All',
-    height: 0,
-    search: '',
-    width: 0,
-    year: '2017',
-  };
+  state = INITIAL_STATE;
 
   componentDidMount() {
     this._handleResize();
@@ -29,6 +37,8 @@ class Home extends React.Component {
   }
 
   render() {
+    const finishTypes = ['All', 'Top Ten', 'Silver Buckle', 'Finisher', 'DNF'];
+
     return (
       <div className="app-page">
         <div
@@ -68,6 +78,25 @@ class Home extends React.Component {
               ))}
             </div>
           </FormGroup>
+          <FormGroup>
+            <ControlLabel>Finish Place</ControlLabel>
+            <div className="gender-radios">
+              {finishTypes.map(label => {
+                const value = label.split(' ').join('').toLowerCase();
+
+                return (
+                  <Checkbox
+                    checked={this.state.finishType[value]}
+                    inline
+                    key={value}
+                    name={value}
+                    onChange={this._handleChange}>
+                    {label}
+                  </Checkbox>
+                );
+              })}
+            </div>
+          </FormGroup>
         </div>
         <div
           className="app-chart"
@@ -82,8 +111,43 @@ class Home extends React.Component {
   }
 
   _handleChange = e => {
-    const {id, name, value} = e.target;
-    this.setState({[name]: name === 'gender' ? id : value});
+    const {checked, id, name, value} = e.target;
+    const newState = {[name]: value};
+
+    switch (name) {
+      case 'gender':
+        newState[name] = id;
+        break;
+      case 'all':
+        // Reset the finish type filters when clicking 'all'.
+        newState.finishType = INITIAL_STATE.finishType;
+        break;
+      case 'topten':
+      case 'silverbuckle':
+      case 'finisher':
+      case 'dnf':
+        const finishType = {
+          ...this.state.finishType,
+          [name]: checked,
+        };
+
+        // Check if any types besides 'all' have been checked.
+        let hasChecked = false;
+        Object.keys(finishType).forEach(key => {
+          if (key === 'all' || hasChecked) {
+            return;
+          }
+          hasChecked = finishType[key];
+        });
+
+        newState.finishType = {
+          ...finishType,
+          all: !hasChecked,
+        };
+        break;
+    }
+
+    this.setState(newState);
   }
 
   _handleResize = () => {
