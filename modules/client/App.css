@@ -46,6 +46,23 @@ body {
   overflow-y: scroll;
 }
 
+.runner {
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 11px;
+  padding: 15px;
+}
+.runner.media {
+  margin: 0;
+}
+.runner .media-body {
+  line-height: 1;
+}
+
+.runner h4 {
+  font-size: 13px;
+  margin: 0 0 6px;
+}
+
 .app-chart {
   flex: 1;
 }
@@ -67,13 +84,13 @@ body {
   stroke-width: 1px;
 }
 
-.runner .line {
+.runner-line .line {
   stroke: #34ace4;
   stroke-opacity: 0.2;
 }
 
 .line:hover,
-.runner .line:hover {
+.runner-line .line:hover {
   cursor: pointer;
   stroke-opacity: 1;
 }

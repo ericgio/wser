@@ -6,16 +6,10 @@ import React from 'react';
 
 import secondsToTime from '../../utils/secondsToTime';
 
-import data from '../data/2017.json';
-
 import AID_STATIONS from '../../constants/aidStations';
 
 const DISTANCE_MAX = 100.2;
 const DISTANCE_MIN = 0;
-const GENDER = {
-  FEMALE: 'F',
-  MALE: 'M',
-};
 const SEC_PER_HR = 3600;
 const SILVER_BUCKLE = 24 * SEC_PER_HR;
 const TIME_MAX = 30 * SEC_PER_HR;
@@ -23,7 +17,7 @@ const TIME_MIN = 0;
 
 class SplitsChart extends React.Component {
   render() {
-    const {height, margin, width, year} = this.props;
+    const {data, height, margin, width, year} = this.props;
     const innerHeight = getInnerHeight(height, margin);
     const innerWidth = getInnerWidth(width, margin);
 
@@ -74,80 +68,28 @@ class SplitsChart extends React.Component {
           x={d => x(d.distance)}
           y={d => y(d.duration)}
         />
-        {data.map(row => this._renderLine(row, x, y))}
+        {data.map(row => (
+          <g className="runner-line" key={row.bib}>
+            <Line
+              data={row.splits}
+              x={d => x(d.distance)}
+              y={d => y(d.duration)}
+            />
+          </g>
+        ))}
       </Chart>
     );
-  }
-
-  _renderLine = (row, x, y) => {
-    if (this._isFiltered(row)) {
-      return null;
-    }
-
-    return (
-      <g className="runner" key={row.bib}>
-        <Line
-          data={row.splits}
-          x={d => x(d.distance)}
-          y={d => y(d.duration)}
-        />
-      </g>
-    );
-  }
-
-  /**
-   * Progressively filter out data.
-   */
-  _isFiltered = row => {
-    const {finishType, gender, search} = this.props;
-    const searchString = search.toLowerCase();
-    const name = `${row.firstName} ${row.lastName}`.toLowerCase();
-
-    if (name.indexOf(searchString) === -1) {
-      return true;
-    }
-
-    switch (gender) {
-      case 'Male':
-        if (row.gender !== GENDER.MALE) {
-          return true;
-        }
-        break;
-      case 'Female':
-        if (row.gender !== GENDER.FEMALE) {
-          return true;
-        }
-        break;
-    }
-
-    const {all, dnf, finisher, silverbuckle, topten} = finishType;
-
-    if (
-      all ||
-      (dnf && !row.finishTime) ||
-      (finisher && row.finishTime) ||
-      (silverbuckle && !!row.finishTime && row.finishTime < SILVER_BUCKLE) ||
-      (topten && (
-        (row.gender === GENDER.MALE && row.overallPlace <= 10) ||
-        (row.gender === GENDER.FEMALE && row.overallPlace <= 36)
-      ))
-    ) {
-      return false;
-    }
-
-    return true;
   }
 }
 
 SplitsChart.propTypes = {
-  finishType: PropTypes.shape({
-    all: PropTypes.bool.isRequired,
-    dnf: PropTypes.bool.isRequired,
-    finisher: PropTypes.bool.isRequired,
-    silverbuckle: PropTypes.bool.isRequired,
-    topten: PropTypes.bool.isRequired,
-  }).isRequired,
-  gender: PropTypes.string.isRequired,
+  data: PropTypes.arrayOf(PropTypes.shape({
+    bib: PropTypes.string.isRequired,
+    splits: PropTypes.arrayOf(PropTypes.shape({
+      distance: PropTypes.number.isRequired,
+      duration: PropTypes.number.isRequired,
+    }).isRequired).isRequired,
+  }).isRequired).isRequired,
   height: PropTypes.number.isRequired,
   margin: PropTypes.shape({
     bottom: PropTypes.number.isRequired,
@@ -155,7 +97,6 @@ SplitsChart.propTypes = {
     right: PropTypes.number.isRequired,
     top: PropTypes.number.isRequired,
   }),
-  search: PropTypes.string.isRequired,
   width: PropTypes.number.isRequired,
   year: PropTypes.string.isRequired,
 };

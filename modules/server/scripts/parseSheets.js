@@ -100,12 +100,16 @@ function parseSheet(rows) {
       });
     }
 
+    const firstName = row[3];
+    const lastName = row[4];
+
     data.push({
       overallPlace: +row[0],
       finishTime: timeToSeconds(row[1]),
       bib: row[2],
-      firstName: row[3],
-      lastName: row[4],
+      firstName,
+      lastName,
+      name: firstName + ' ' + lastName,
       gender: row[5],
       age: +row[6],
       city: row[7],

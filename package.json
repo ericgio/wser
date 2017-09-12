@@ -1,6 +1,7 @@
 {
   "name": "WSER",
   "scripts": {
+    "data": "node ./modules/server/scripts/parseSheets.js",
     "start": "heroku local -f Procfile.local",
     "build": "npm run build-assets && npm run build-lib",
     "build-assets": "NODE_ENV=production webpack -p --json > stats.json",
