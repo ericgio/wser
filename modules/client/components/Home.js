@@ -13,6 +13,7 @@ class Home extends React.Component {
     filter: '',
     height: 0,
     width: 0,
+    year: '2017',
   };
 
   componentDidMount() {
