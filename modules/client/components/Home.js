@@ -1,10 +1,8 @@
 import React from 'react';
 import {findDOMNode} from 'react-dom';
-import {Checkbox, ControlLabel, FormControl, FormGroup, Radio} from 'react-bootstrap';
 
 import SplitsChart from './SplitsChart';
-
-import AID_STATIONS from '../../constants/aidStations';
+import Toolbar from './Toolbar';
 
 import './Home.css';
 
@@ -22,7 +20,7 @@ const INITIAL_STATE = {
   width: 0,
   year: '2017',
 };
-const PADDING = 15;
+const PADDING = 20;
 
 class Home extends React.Component {
   state = INITIAL_STATE;
@@ -37,67 +35,17 @@ class Home extends React.Component {
   }
 
   render() {
-    const finishTypes = ['All', 'Top Ten', 'Silver Buckle', 'Finisher', 'DNF'];
-
     return (
       <div className="app-page">
-        <div
+        <Toolbar
+          {...this.state}
           className="app-toolbar form-inline"
+          onChange={this._handleChange}
           ref={t => this._toolbar = t}
           style={{
             padding: `${PADDING}px`,
-          }}>
-          <FormGroup>
-            <ControlLabel>Year</ControlLabel>
-            <FormControl
-              componentClass="select"
-              name="year"
-              onChange={this._handleChange}>
-              {Object.keys(AID_STATIONS).map(year => (
-                <option key={year} value={year}>{year}</option>
-              ))}
-            </FormControl>
-          </FormGroup>
-          <FormGroup>
-            <ControlLabel>Runner Name</ControlLabel>
-            <FormControl name="search" onChange={this._handleChange} />
-          </FormGroup>
-          <FormGroup>
-            <ControlLabel>Gender</ControlLabel>
-            <div className="gender-radios">
-              {['All', 'Male', 'Female'].map(type => (
-                <Radio
-                  checked={this.state.gender === type}
-                  id={type}
-                  inline
-                  key={type}
-                  name="gender"
-                  onChange={this._handleChange}>
-                  {type}
-                </Radio>
-              ))}
-            </div>
-          </FormGroup>
-          <FormGroup>
-            <ControlLabel>Finish Place</ControlLabel>
-            <div className="gender-radios">
-              {finishTypes.map(label => {
-                const value = label.split(' ').join('').toLowerCase();
-
-                return (
-                  <Checkbox
-                    checked={this.state.finishType[value]}
-                    inline
-                    key={value}
-                    name={value}
-                    onChange={this._handleChange}>
-                    {label}
-                  </Checkbox>
-                );
-              })}
-            </div>
-          </FormGroup>
-        </div>
+          }}
+        />
         <div
           className="app-chart"
           ref={c => this._chart = c}
