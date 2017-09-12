@@ -4,8 +4,6 @@ import {findDOMNode} from 'react-dom';
 import SplitsChart from './SplitsChart';
 import Toolbar from './Toolbar';
 
-import './Home.css';
-
 const INITIAL_STATE = {
   finishType: {
     all: true,
@@ -20,7 +18,10 @@ const INITIAL_STATE = {
   width: 0,
   year: '2017',
 };
-const PADDING = 20;
+
+const PADDING_H = 20;
+const PADDING_V = 10;
+const SIDEBAR_WIDTH = 350;
 
 class Home extends React.Component {
   state = INITIAL_STATE;
@@ -41,18 +42,31 @@ class Home extends React.Component {
           {...this.state}
           className="app-toolbar form-inline"
           onChange={this._handleChange}
-          ref={t => this._toolbar = t}
+          ref={i => this._toolbar = i}
           style={{
-            padding: `${PADDING}px`,
+            padding: `${PADDING_V}px ${PADDING_H}px`,
           }}
         />
-        <div
-          className="app-chart"
-          ref={c => this._chart = c}
-          style={{
-            padding: `0 ${PADDING}px`,
-          }}>
-          <SplitsChart {...this.state} />
+        <div className="app-data">
+          <div
+            className="app-chart"
+            style={{padding: `0 0 ${PADDING_V}px ${PADDING_H}px`}}>
+            <SplitsChart {...this.state} />
+          </div>
+          <div
+            className="app-sidebar"
+            ref={i => this._sidebar = i}
+            style={{width: `${SIDEBAR_WIDTH}px`}}>
+            {[0,1,2,3,4,5,6,7,8,9,10].map(n => (
+              <div
+                style={{
+                  borderBottom: '1px solid #f0f0f0',
+                  padding: '30px'
+                }}>
+                {n}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -99,14 +113,15 @@ class Home extends React.Component {
   }
 
   _handleResize = () => {
-    const chartNode = findDOMNode(this._chart);
     const parentNode = findDOMNode(this);
+    const sidebarNode = findDOMNode(this._sidebar);
     const toolbarNode = findDOMNode(this._toolbar);
 
-    this.setState({
-      height: parentNode.offsetHeight - toolbarNode.offsetHeight - PADDING,
-      width: chartNode.offsetWidth - PADDING,
-    });
+    const height =
+      parentNode.offsetHeight - toolbarNode.offsetHeight - PADDING_V * 2;
+    const width = parentNode.offsetWidth - SIDEBAR_WIDTH - PADDING_H;
+
+    this.setState({height, width});
   }
 }
 

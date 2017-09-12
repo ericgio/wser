@@ -36,6 +36,16 @@ body {
   vertical-align: -webkit-baseline-middle;
 }
 
+.app-data {
+  display: flex;
+  height: 100%;
+}
+
+.app-sidebar {
+  border-left: 1px solid #f0f0f0;
+  overflow-y: scroll;
+}
+
 .app-chart {
   flex: 1;
 }
