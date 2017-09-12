@@ -1,4 +1,4 @@
-export default function secondsToTime(seconds) {
+function secondsToTime(seconds) {
   seconds = parseInt(seconds, 10);
 
   let h = Math.floor(seconds / 3600);
@@ -11,3 +11,5 @@ export default function secondsToTime(seconds) {
 
   return `${h}:${m}:${s}`;
 }
+
+module.exports = secondsToTime;
