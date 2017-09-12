@@ -31,7 +31,7 @@ class TemperatureChart extends React.Component {
   }
 
   render() {
-    const {filter, height, margin, width} = this.props;
+    const {height, margin, width} = this.props;
 
     const x = d3.scaleTime()
       .domain(d3.extent(data, d => d.date))

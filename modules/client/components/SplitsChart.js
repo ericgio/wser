@@ -5,7 +5,6 @@ import {getInnerHeight, getInnerWidth, translate} from 'r-d3/lib/utils';
 import React from 'react';
 
 import secondsToTime from '../../utils/secondsToTime';
-import timeToSeconds from '../../utils/timeToSeconds';
 
 import data from '../data/2017.json';
 
@@ -23,7 +22,7 @@ const TIME_MIN = 0;
 class SplitsChart extends React.Component {
 
   render() {
-    const {filter, height, margin, width, year} = this.props;
+    const {height, margin, width, year} = this.props;
 
     const innerHeight = getInnerHeight(height, margin);
     const innerWidth = getInnerWidth(width, margin);

@@ -5,4 +5,5 @@ public/assets
 lib
 
 google_secret.json
+npm-debug.log
 stats.json

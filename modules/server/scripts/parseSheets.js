@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const fs = require('fs');
 const google = require('googleapis');
@@ -8,10 +8,13 @@ const timeToSeconds = require('../../utils/timeToSeconds');
 
 const AID_STATIONS = require('../../constants/aidStations');
 
+const DATA_ROW_START = 2;
 const NO_TIME = '--:--';
+const SPLIT_COL_START = 10;
 const WSER_SHEET_ID = '1qdx6dxAkMOdqDf6SEZMueEJSbEegmqhY6SYLSAh5tNY';
 const YEAR = '2017';
 
+/* eslint-disable no-console */
 function getTime(row, index) {
   const finishTime = row[1];
   const nextSplit = row[index + 2];
@@ -56,7 +59,7 @@ function parseData(auth) {
     }
 
     const rows = response.values;
-    if (rows.length == 0) {
+    if (rows.length === 0) {
       console.log('No data found.');
       return [];
     }
@@ -72,10 +75,6 @@ function parseData(auth) {
 }
 
 function parseSheet(rows) {
-  const LABEL_ROW = rows[1];
-  const DATA_ROW_START = 2;
-  const SPLIT_COL_START = 10;
-
   const data = [];
 
   for (var ii = DATA_ROW_START; ii < rows.length; ii++) {

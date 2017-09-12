@@ -2,10 +2,12 @@ var fs = require('fs');
 var readline = require('readline');
 var googleAuth = require('google-auth-library');
 
+/* eslint-disable no-console */
+
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/sheets.googleapis.com-nodejs-quickstart.json
 var SCOPES = [
-  'https://www.googleapis.com/auth/spreadsheets.readonly'
+  'https://www.googleapis.com/auth/spreadsheets.readonly',
 ];
 
 var TOKEN_DIR =
@@ -29,7 +31,7 @@ function authorize(credentials, callback) {
   var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
   // Check if we have previously stored a token.
-  fs.readFile(TOKEN_PATH, function(err, token) {
+  fs.readFile(TOKEN_PATH, (err, token) => {
     if (err) {
       getNewToken(oauth2Client, callback);
     } else {
@@ -50,16 +52,16 @@ function authorize(credentials, callback) {
 function getNewToken(oauth2Client, callback) {
   var authUrl = oauth2Client.generateAuthUrl({
     access_type: 'offline',
-    scope: SCOPES
+    scope: SCOPES,
   });
   console.log('Authorize this app by visiting this url: ', authUrl);
   var rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
   });
-  rl.question('Enter the code from that page here: ', function(code) {
+  rl.question('Enter the code from that page here: ', code => {
     rl.close();
-    oauth2Client.getToken(code, function(err, token) {
+    oauth2Client.getToken(code, (err, token) => {
       if (err) {
         console.log('Error while trying to retrieve access token', err);
         return;
@@ -80,7 +82,7 @@ function storeToken(token) {
   try {
     fs.mkdirSync(TOKEN_DIR);
   } catch (err) {
-    if (err.code != 'EEXIST') {
+    if (err.code !== 'EEXIST') {
       throw err;
     }
   }
