@@ -12,9 +12,7 @@ import AID_STATIONS from '../../constants/aidStations';
 
 const DISTANCE_MAX = 100.2;
 const DISTANCE_MIN = 0;
-
 const SEC_PER_HR = 3600;
-
 const SILVER_BUCKLE = 24 * SEC_PER_HR;
 const TIME_MAX = 30 * SEC_PER_HR;
 const TIME_MIN = 0;
@@ -54,7 +52,7 @@ class SplitsChart extends React.Component {
           scale={y}
           tickFormat={seconds => secondsToTime(seconds)}
           ticks={30}
-          tickValues={[0, 24, 30].map(t => t * SEC_PER_HR)}
+          tickValues={[0, 6, 12, 18, 24, 30].map(t => t * SEC_PER_HR)}
         />
         <Line
           className="silver-buckle-cutoff"
@@ -71,10 +69,7 @@ class SplitsChart extends React.Component {
   }
 
   _renderLine = (row, x, y) => {
-    const filter = this.props.filter.toLowerCase();
-    const name = `${row.firstName} ${row.lastName}`.toLowerCase();
-
-    if (name.indexOf(filter) === -1) {
+    if (this._isFiltered(row)) {
       return null;
     }
 
@@ -88,21 +83,42 @@ class SplitsChart extends React.Component {
       </g>
     );
   }
+
+  _isFiltered = row => {
+    const {gender, search} = this.props;
+    const searchString = search.toLowerCase();
+    const name = `${row.firstName} ${row.lastName}`.toLowerCase();
+
+    if (name.indexOf(searchString) === -1) {
+      return true;
+    }
+
+    switch (gender) {
+      case 'All':
+        return false;
+      case 'Male':
+        return row.gender !== 'M';
+      case 'Female':
+        return row.gender !== 'F';
+    }
+  }
 }
 
 SplitsChart.propTypes = {
-  filter: PropTypes.string,
+  gender: PropTypes.string.isRequired,
+  height: PropTypes.number.isRequired,
   margin: PropTypes.shape({
     bottom: PropTypes.number.isRequired,
     left: PropTypes.number.isRequired,
     right: PropTypes.number.isRequired,
     top: PropTypes.number.isRequired,
   }),
+  search: PropTypes.string.isRequired,
+  width: PropTypes.number.isRequired,
   year: PropTypes.string.isRequired,
 };
 
 SplitsChart.defaultProps = {
-  filter: '',
   margin: {top: 20, right: 20, bottom: 20, left: 50},
 };
 

@@ -1,16 +1,20 @@
 import React from 'react';
 import {findDOMNode} from 'react-dom';
+import {ControlLabel, Form, FormControl, FormGroup, Radio} from 'react-bootstrap';
 
 import SplitsChart from './SplitsChart';
 
+import AID_STATIONS from '../../constants/aidStations';
+
 import './Home.css';
 
-const PADDING = 20;
+const PADDING = 15;
 
 class Home extends React.Component {
   state = {
-    filter: '',
+    gender: 'All',
     height: 0,
+    search: '',
     width: 0,
     year: '2017',
   };
@@ -26,26 +30,60 @@ class Home extends React.Component {
 
   render() {
     return (
-      <div
-        className="app-page"
-        style={{
-          padding: `${PADDING}px`,
-        }}>
-        <div className="app-toolbar" ref={t => this._toolbar = t}>
-          <div>
-            <label>Filter runner name: </label>
-            <input onChange={this._handleFilter} />
-          </div>
+      <div className="app-page">
+        <div
+          className="app-toolbar"
+          ref={t => this._toolbar = t}
+          style={{
+            padding: `${PADDING}px`,
+          }}>
+          <Form inline>
+            <FormGroup>
+              <ControlLabel>Year</ControlLabel>
+              <FormControl
+                componentClass="select"
+                name="year"
+                onChange={this._handleChange}>
+                {Object.keys(AID_STATIONS).map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
+              </FormControl>
+            </FormGroup>
+            <FormGroup>
+              <ControlLabel>Runner Name</ControlLabel>
+              <FormControl name="search" onChange={this._handleChange} />
+            </FormGroup>
+            <FormGroup>
+              <ControlLabel>Gender</ControlLabel>
+              {['All', 'Male', 'Female'].map(type => (
+                <Radio
+                  checked={this.state.gender === type}
+                  id={type}
+                  inline
+                  key={type}
+                  name="gender"
+                  onChange={this._handleChange}>
+                  {type}
+                </Radio>
+              ))}
+            </FormGroup>
+          </Form>
         </div>
-        <div className="app-chart" ref={c => this._chart = c}>
+        <div
+          className="app-chart"
+          ref={c => this._chart = c}
+          style={{
+            padding: `0 ${PADDING}px`,
+          }}>
           <SplitsChart {...this.state} />
         </div>
       </div>
     );
   }
 
-  _handleFilter = e => {
-    this.setState({filter: e.target.value});
+  _handleChange = e => {
+    const {id, name, value} = e.target;
+    this.setState({[name]: name === 'gender' ? id : value});
   }
 
   _handleResize = () => {
@@ -54,8 +92,8 @@ class Home extends React.Component {
     const toolbarNode = findDOMNode(this._toolbar);
 
     this.setState({
-      height: parentNode.offsetHeight - toolbarNode.offsetHeight - PADDING * 2,
-      width: chartNode.offsetWidth,
+      height: parentNode.offsetHeight - toolbarNode.offsetHeight - PADDING,
+      width: chartNode.offsetWidth - PADDING,
     });
   }
 }

@@ -32,6 +32,7 @@ class MainPage extends React.Component {
           <script dangerouslySetInnerHTML={{__html: "window.fetch || document.write('\\x3Cscript src=\"/fetch.min.js\">\\x3C/script>')"}}/>
           <script dangerouslySetInnerHTML={{__html: 'window.webpackManifest = ' + JSON.stringify(webpackManifest)}}/>
           {styles.map(s => <link href={s} key={s} rel="stylesheet"/>)}
+          <link crossOrigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" rel="stylesheet" />
         </head>
         <body>
           <div id="app"/>
