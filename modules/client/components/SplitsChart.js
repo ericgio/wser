@@ -6,12 +6,10 @@ import React from 'react';
 
 import secondsToTime from '../../utils/secondsToTime';
 
-import AID_STATIONS from '../../constants/aidStations';
+import {AID_STATIONS, SEC_PER_HR, SILVER_BUCKLE_TIME} from '../../constants';
 
 const DISTANCE_MAX = 100.2;
 const DISTANCE_MIN = 0;
-const SEC_PER_HR = 3600;
-const SILVER_BUCKLE = 24 * SEC_PER_HR;
 const TIME_MAX = 30 * SEC_PER_HR;
 const TIME_MIN = 0;
 
@@ -62,8 +60,8 @@ class SplitsChart extends React.Component {
         <Line
           className="silver-buckle-cutoff"
           data={[
-            {distance: DISTANCE_MIN, duration: SILVER_BUCKLE},
-            {distance: DISTANCE_MAX, duration: SILVER_BUCKLE},
+            {distance: DISTANCE_MIN, duration: SILVER_BUCKLE_TIME},
+            {distance: DISTANCE_MAX, duration: SILVER_BUCKLE_TIME},
           ]}
           x={d => x(d.distance)}
           y={d => y(d.duration)}

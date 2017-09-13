@@ -31,12 +31,18 @@ const GENDER = {
   MALE: 'M',
 };
 
+const GENDER_TO_LABEL = {
+  [GENDER.MALE]: 'Male',
+  [GENDER.FEMALE]: 'Female',
+};
+
 const SEC_PER_HR = 3600;
 const SILVER_BUCKLE_TIME = 24 * SEC_PER_HR;
 
 module.exports = {
   AID_STATIONS,
   GENDER,
+  GENDER_TO_LABEL,
   SEC_PER_HR,
   SILVER_BUCKLE_TIME,
 };

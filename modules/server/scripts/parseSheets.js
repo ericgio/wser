@@ -6,7 +6,7 @@ const google = require('googleapis');
 const authClient = require('../google');
 const timeToSeconds = require('../../utils/timeToSeconds');
 
-const AID_STATIONS = require('../../constants/aidStations');
+const {AID_STATIONS, GENDER} = require('../../constants');
 
 const DATA_ROW_START = 2;
 const NO_TIME = '--:--';
@@ -47,7 +47,7 @@ fs.readFile('google_secret.json', (err, content) => (
 function parseData(auth) {
   const sheets = google.sheets('v4');
   const settings = {
-    auth: auth,
+    auth,
     spreadsheetId: WSER_SHEET_ID,
     range: YEAR,
   };
@@ -76,12 +76,16 @@ function parseData(auth) {
 
 function parseSheet(rows) {
   const data = [];
+  const genderPlaces = {
+    [GENDER.MALE]: 0,
+    [GENDER.FEMALE]: 0,
+  };
 
-  for (var ii = DATA_ROW_START; ii < rows.length; ii++) {
+  for (let ii = DATA_ROW_START; ii < rows.length; ii++) {
     let row = rows[ii];
     let splits = [];
 
-    for (var jj = SPLIT_COL_START; jj < row.length; jj+=2) {
+    for (let jj = SPLIT_COL_START; jj < row.length; jj+=2) {
       let index = (jj - SPLIT_COL_START) / 2;
 
       let aidStation = AID_STATIONS[YEAR][index];
@@ -102,6 +106,10 @@ function parseSheet(rows) {
 
     const firstName = row[3];
     const lastName = row[4];
+    const gender = row[5];
+
+    // Increment gender place.
+    genderPlaces[gender] += 1;
 
     data.push({
       overallPlace: +row[0],
@@ -109,8 +117,9 @@ function parseSheet(rows) {
       bib: row[2],
       firstName,
       lastName,
-      name: firstName + ' ' + lastName,
-      gender: row[5],
+      name: `${firstName} ${lastName}`,
+      gender,
+      genderPlace: genderPlaces[gender],
       age: +row[6],
       city: row[7],
       state: row[8],

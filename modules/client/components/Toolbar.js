@@ -1,7 +1,7 @@
 import React from 'react';
 import {Checkbox, ControlLabel, FormControl, FormGroup, Radio} from 'react-bootstrap';
 
-import AID_STATIONS from '../../constants/aidStations';
+import {AID_STATIONS} from '../../constants';
 
 const FINISH_TYPES = ['All', 'Top Ten', 'Silver Buckle', 'Finisher', 'DNF'];
 

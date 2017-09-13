@@ -51,9 +51,11 @@ body {
   font-size: 11px;
   padding: 15px;
 }
+
 .runner.media {
   margin: 0;
 }
+
 .runner .media-body {
   line-height: 1;
 }

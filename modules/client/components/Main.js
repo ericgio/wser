@@ -8,6 +8,8 @@ import Toolbar from './Toolbar';
 import data from '../data/2017.json';
 import secondsToTime from '../../utils/secondsToTime';
 
+import {GENDER, GENDER_TO_LABEL, SILVER_BUCKLE_TIME} from '../../constants';
+
 const INITIAL_STATE = {
   finishType: {
     all: true,
@@ -22,13 +24,6 @@ const INITIAL_STATE = {
   width: 0,
   year: '2017',
 };
-
-const GENDER = {
-  FEMALE: 'F',
-  MALE: 'M',
-};
-const SEC_PER_HR = 3600;
-const SILVER_BUCKLE = 24 * SEC_PER_HR;
 
 const PADDING_H = 20;
 const PADDING_V = 10;
@@ -54,24 +49,30 @@ function getState({country, state}) {
   }
 }
 
-const Runner = props => {
+const Runner = ({finishTime, ...props}) => {
   const country = getCountry(props.country);
   const state = getState(props);
-  const time = props.finishTime ? secondsToTime(props.finishTime) : 'DNF';
+
+  let place = props.overallPlace;
+  let time = secondsToTime(finishTime);
+  if (!finishTime) {
+    place = 'DNF';
+    time = '--:--';
+  }
 
   return (
     <Media className="runner">
-      <Media.Left>
-        {props.overallPlace}
-      </Media.Left>
+      <Media.Left>{place}</Media.Left>
       <Media.Body>
         <h4 className="clearfix">
-          <div className="pull-left">{props.name}</div>
+          <div className="pull-left">
+            {props.name} <small>#{props.bib}</small>
+          </div>
           <div className="pull-right">{time}</div>
         </h4>
         <div className="clearfix">
           <div className="pull-left">
-            Bib #{props.bib} {props.gender}, {props.age}
+            {props.gender}{props.age}, GP: {props.genderPlace}
           </div>
           <div className="pull-right">
             {props.city}, {state} {country}
@@ -156,11 +157,8 @@ class Home extends React.Component {
       all ||
       (dnf && !row.finishTime) ||
       (finisher && row.finishTime) ||
-      (silverbuckle && !!row.finishTime && row.finishTime < SILVER_BUCKLE) ||
-      (topten && (
-        (row.gender === GENDER.MALE && row.overallPlace <= 10) ||
-        (row.gender === GENDER.FEMALE && row.overallPlace <= 36)
-      ))
+      (silverbuckle && row.finishTime && row.finishTime < SILVER_BUCKLE_TIME) ||
+      (topten && row.genderPlace <= 10)
     ) {
       return true;
     }
