@@ -108,6 +108,7 @@ function parseSheet(rows) {
 
     const firstName = row[3];
     const lastName = row[4];
+    const finishTime = timeToSeconds(row[1]);
     const gender = row[5];
 
     // Increment gender place.
@@ -115,13 +116,13 @@ function parseSheet(rows) {
 
     data.push({
       overallPlace: +row[0],
-      finishTime: timeToSeconds(row[1]),
+      finishTime,
       bib: row[2],
       firstName,
       lastName,
       name: `${firstName} ${lastName}`,
       gender,
-      genderPlace: genderPlaces[gender],
+      genderPlace: finishTime ? genderPlaces[gender] : null,
       age: +row[6],
       city: row[7],
       state: row[8],

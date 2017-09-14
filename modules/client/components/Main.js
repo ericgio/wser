@@ -72,7 +72,8 @@ const Runner = ({finishTime, ...props}) => {
         </h4>
         <div className="clearfix">
           <div className="pull-left">
-            {props.gender}{props.age}, GP: {props.genderPlace}
+            {props.gender}{props.age}
+            {!!finishTime && `, GP: ${props.genderPlace}`}
           </div>
           <div className="pull-right">
             {props.city}, {state} {country}
