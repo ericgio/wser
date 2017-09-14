@@ -5,7 +5,7 @@ import {Media} from 'react-bootstrap';
 import SplitsChart from './SplitsChart';
 import Toolbar from './Toolbar';
 
-import data from '../data/2017.json';
+import dataByYear from '../data';
 import secondsToTime from '../../utils/secondsToTime';
 
 import {GENDER, GENDER_TO_LABEL, SILVER_BUCKLE_TIME} from '../../constants';
@@ -96,7 +96,7 @@ class Home extends React.Component {
   }
 
   render() {
-    const filteredData = data.filter(this._filterData);
+    const filteredData = dataByYear[this.state.year].filter(this._filterData);
 
     return (
       <div className="app-page">
@@ -108,6 +108,7 @@ class Home extends React.Component {
           style={{
             padding: `${PADDING_V}px ${PADDING_H}px`,
           }}
+          years={Object.keys(dataByYear).reverse()}
         />
         <div className="app-data">
           <div

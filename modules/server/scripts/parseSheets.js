@@ -36,7 +36,9 @@ function getTime(row, index) {
     time = getTime(row, index - 2);
   }
 
-  return time == null ? time : time.split('-').pop();
+  return time == null ?
+    time :
+    time.split('-').filter(t => t && t !== ':').pop();
 }
 
 // Load client secrets from a local file.

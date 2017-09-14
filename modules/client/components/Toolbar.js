@@ -1,8 +1,6 @@
 import React from 'react';
 import {Checkbox, ControlLabel, FormControl, FormGroup, Radio} from 'react-bootstrap';
 
-import {AID_STATIONS} from '../../constants';
-
 const FINISH_TYPES = ['All', 'Top Ten', 'Silver Buckle', 'Finisher', 'DNF'];
 
 class Toolbar extends React.Component {
@@ -15,6 +13,7 @@ class Toolbar extends React.Component {
       search,
       width,
       year,
+      years,
       ...otherProps
     } = this.props;
 
@@ -25,10 +24,9 @@ class Toolbar extends React.Component {
           <FormControl
             componentClass="select"
             name="year"
-            onChange={onChange}>
-            {Object.keys(AID_STATIONS).map(year => (
-              <option key={year} value={year}>{year}</option>
-            ))}
+            onChange={onChange}
+            value={year}>
+            {years.map(y => <option key={y} value={y}>{y}</option>)}
           </FormControl>
         </FormGroup>
         <FormGroup>
