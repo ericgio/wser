@@ -1,3 +1,4 @@
+import cx from 'classnames';
 import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 import {Axis, Chart, Line} from 'r-d3';
@@ -67,7 +68,9 @@ class SplitsChart extends React.Component {
           y={d => y(d.duration)}
         />
         {data.map(row => (
-          <g className="runner-line" key={row.bib}>
+          <g
+            className={cx('runner-line', row.gender.toLowerCase())}
+            key={row.bib}>
             <Line
               data={row.splits}
               x={d => x(d.distance)}

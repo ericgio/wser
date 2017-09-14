@@ -82,7 +82,6 @@ body {
 
 .line {
   fill: none;
-  stroke-opacity: 0.5;
   stroke-width: 1px;
 }
 
@@ -90,11 +89,12 @@ body {
   stroke: #34ace4;
   stroke-opacity: 0.2;
 }
-
-.line:hover,
 .runner-line .line:hover {
   cursor: pointer;
   stroke-opacity: 1;
+}
+.runner-line.f .line {
+  stroke: #dd0447;
 }
 
 .silver-buckle-cutoff {
