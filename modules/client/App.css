@@ -72,7 +72,7 @@ body {
 .axis path,
 .axis line {
   fill: none;
-  stroke: #e5e5e5;
+  stroke: #f0f0f0;
   shape-rendering: crispEdges;
 }
 

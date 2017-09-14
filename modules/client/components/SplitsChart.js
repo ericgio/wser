@@ -28,6 +28,7 @@ class SplitsChart extends React.Component {
       .domain([TIME_MIN, TIME_MAX])
       .range([innerHeight, 0]);
 
+    const xTickValues = AID_STATIONS[year].map(d => d.distance);
     const yTickValues = [0, 6, 12, 18, 24, 30].map(t => t * SEC_PER_HR);
 
     return (
@@ -36,12 +37,21 @@ class SplitsChart extends React.Component {
         transform={translate(margin.left, margin.top)}
         width={width}>
         <Axis
+          className="x-axis-background"
+          orient="top"
+          scale={x}
+          tickFormat={distance => {}}
+          tickSize={innerHeight}
+          tickValues={xTickValues}
+          transform={translate(0, innerHeight)}
+        />
+        <Axis
           className="x-axis"
           orient="bottom"
           scale={x}
           tickFormat={distance => distance.toFixed(1)}
           tickSize={5}
-          tickValues={AID_STATIONS[year].map(d => d.distance)}
+          tickValues={xTickValues}
           transform={translate(0, innerHeight)}
         />
         <Axis
