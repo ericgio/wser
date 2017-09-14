@@ -10,7 +10,6 @@ const timeToSeconds = require('../../utils/timeToSeconds');
 const {AID_STATIONS, GENDER} = require('../../constants');
 
 const DATA_ROW_START = 2;
-const NO_TIME = '--:--';
 const SPLIT_COL_START = 10;
 const WSER_SHEET_ID = '1qdx6dxAkMOdqDf6SEZMueEJSbEegmqhY6SYLSAh5tNY';
 const YEAR = '2017';
@@ -65,15 +64,14 @@ function parseSheet(rows) {
       let index = (jj - SPLIT_COL_START) / 2;
 
       let aidStation = AID_STATIONS[YEAR][index];
-      let time = row[jj];
-
-      if (time === NO_TIME || time === '') {
-        // Skip if there's no valid data.
-        continue;
-      }
 
       // Parse the value to get a valid time.
-      time = time.split('-').filter(t => t && t !== ':').pop();
+      let time = row[jj].split('-').filter(t => t && t !== ':').pop();
+
+      // Skip if there's no valid time.
+      if (!time) {
+        continue;
+      }
 
       splits.push({
         distance: aidStation.distance,
