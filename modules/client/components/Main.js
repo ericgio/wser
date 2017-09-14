@@ -8,7 +8,7 @@ import Toolbar from './Toolbar';
 import dataByYear from '../data';
 import secondsToTime from '../../utils/secondsToTime';
 
-import {GENDER, GENDER_TO_LABEL, SILVER_BUCKLE_TIME} from '../../constants';
+import {GENDER, SILVER_BUCKLE_TIME} from '../../constants';
 
 const INITIAL_STATE = {
   finishType: {

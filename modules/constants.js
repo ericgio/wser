@@ -17,7 +17,7 @@ const AID_STATIONS_BASE = [
   {distance: 78.0, name: 'Rucky Chucky'},
   {distance: 79.8, name: 'Green Gate'},
   {distance: 85.2, name: 'Auburn Lake Trails'},
-  {distance: 89.9, name: 'Brown\s Bar'},
+  {distance: 89.9, name: 'Brown\'s Bar'},
   {distance: 93.5, name: 'Highway 49'},
   {distance: 96.8, name: 'No Hands Bridge'},
   {distance: 98.9, name: 'Robie Point'},
