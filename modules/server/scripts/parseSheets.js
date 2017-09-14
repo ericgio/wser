@@ -1,5 +1,6 @@
 'use strict';
 
+/* eslint-disable no-console */
 const fs = require('fs');
 const google = require('googleapis');
 
@@ -13,33 +14,6 @@ const NO_TIME = '--:--';
 const SPLIT_COL_START = 10;
 const WSER_SHEET_ID = '1qdx6dxAkMOdqDf6SEZMueEJSbEegmqhY6SYLSAh5tNY';
 const YEAR = '2017';
-
-/* eslint-disable no-console */
-function getTime(row, index) {
-  const finishTime = row[1];
-  const nextSplit = row[index + 2];
-
-  let time = row[index];
-  if (time === NO_TIME) {
-    if (
-      !finishTime &&
-      nextSplit &&
-      nextSplit === NO_TIME
-    ) {
-      // The runner DNF'd and neither this, nor the next split has a time.
-      // Assume this is where they dropped.
-      return null;
-    }
-
-    // There's no time data for this split. Recursively find the last valid
-    // split and use that so the data doesn't look too noisy.
-    time = getTime(row, index - 2);
-  }
-
-  return time == null ?
-    time :
-    time.split('-').filter(t => t && t !== ':').pop();
-}
 
 // Load client secrets from a local file.
 fs.readFile('google_secret.json', (err, content) => (
@@ -91,12 +65,15 @@ function parseSheet(rows) {
       let index = (jj - SPLIT_COL_START) / 2;
 
       let aidStation = AID_STATIONS[YEAR][index];
-      let time = getTime(row, jj);
+      let time = row[jj];
 
-      if (time == null) {
-        // The runner dropped.
-        break;
+      if (time === NO_TIME || time === '') {
+        // Skip if there's no valid data.
+        continue;
       }
+
+      // Parse the value to get a valid time.
+      time = time.split('-').filter(t => t && t !== ':').pop();
 
       splits.push({
         distance: aidStation.distance,
