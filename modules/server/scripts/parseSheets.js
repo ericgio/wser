@@ -67,18 +67,14 @@ function parseSheet(rows) {
 
       // Parse the value to get a valid time.
       let time = row[jj].split('-').filter(t => t && t !== ':').pop();
-
-      // Skip if there's no valid time.
-      if (!time) {
-        continue;
+      if (time) {
+        splits.push({
+          distance: aidStation.distance,
+          duration: timeToSeconds(time),
+          name: aidStation.name,
+          position: row[jj+1],
+        });
       }
-
-      splits.push({
-        distance: aidStation.distance,
-        duration: timeToSeconds(time),
-        name: aidStation.name,
-        position: row[jj+1],
-      });
     }
 
     const firstName = row[3];

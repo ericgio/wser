@@ -183,7 +183,7 @@ class Main extends React.Component {
 
   _handleChange = e => {
     const {checked, id, name, value} = e.target;
-    const newState = {[name]: value};
+    let newState = {};
 
     switch (name) {
       case 'gender':
@@ -215,6 +215,9 @@ class Main extends React.Component {
           ...finishType,
           all: !hasChecked,
         };
+        break;
+      default:
+        newState[name] = value;
         break;
     }
 
