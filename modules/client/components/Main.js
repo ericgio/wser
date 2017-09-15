@@ -173,7 +173,7 @@ class Main extends React.Component {
       (dnf && !row.finishTime) ||
       (finisher && row.finishTime) ||
       (silverbuckle && row.finishTime && row.finishTime < SILVER_BUCKLE_TIME) ||
-      (topten && row.genderPlace <= 10)
+      (topten && row.genderPlace && row.genderPlace <= 10)
     ) {
       return true;
     }
