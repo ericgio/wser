@@ -134,20 +134,32 @@ class Main extends React.Component {
             className="app-sidebar"
             ref={i => this._sidebar = i}
             style={{width: `${SIDEBAR_WIDTH}px`}}>
-            {filteredData.map(data => (
-              // Gordy and Cowman apparently both get bib #0, so add first name
-              // to the key to create a unique identifier.
-              <Runner
-                {...data}
-                key={`${data.bib}-${data.firstName}`}
-                onMouseOver={e => this._handleRunnerMouseOver(e, data)}
-                onMouseOut={e => this.setState({active: null})}
-              />
-            ))}
+            {this._renderSidebarContents(filteredData)}
           </div>
         </div>
       </div>
     );
+  }
+
+  _renderSidebarContents = filteredData => {
+    if (!filteredData.length) {
+      return (
+        <div className="no-results">
+          No results.
+        </div>
+      );
+    }
+
+    return filteredData.map(data => (
+      // Gordy and Cowman apparently both get bib #0, so add first name
+      // to the key to create a unique identifier.
+      <Runner
+        {...data}
+        key={`${data.bib}-${data.firstName}`}
+        onMouseOut={e => this.setState({active: null})}
+        onMouseOver={e => this._handleRunnerMouseOver(e, data)}
+      />
+    ));
   }
 
   /**
