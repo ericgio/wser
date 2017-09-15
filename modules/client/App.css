@@ -97,8 +97,19 @@ body {
   stroke: #dd0447;
 }
 
-.silver-buckle-cutoff {
-  stroke: #dd0447;
+.median-time text {
+  fill: #aaa;
+  font-size: 10px;
+}
+
+.median-time .line,
+.silver-buckle-time {
+  shape-rendering: crispEdges;
+  stroke: #d5d5d5;
   stroke-dasharray: 4, 1;
   stroke-opacity: 1;
+}
+
+.silver-buckle-time {
+  stroke: #dd0447;
 }

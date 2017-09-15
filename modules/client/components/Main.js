@@ -1,3 +1,4 @@
+import * as d3 from 'd3';
 import React from 'react';
 import {findDOMNode} from 'react-dom';
 import {Media} from 'react-bootstrap';
@@ -8,7 +9,7 @@ import Toolbar from './Toolbar';
 import dataByYear from '../data';
 import secondsToTime from '../../utils/secondsToTime';
 
-import {GENDER, SILVER_BUCKLE_TIME} from '../../constants';
+import {GENDER, SEC_PER_HOUR, SILVER_BUCKLE_TIME} from '../../constants';
 
 const INITIAL_STATE = {
   finishType: {
@@ -84,7 +85,7 @@ const Runner = ({finishTime, ...props}) => {
   );
 };
 
-class Home extends React.Component {
+class Main extends React.Component {
   state = INITIAL_STATE;
 
   componentDidMount() {
@@ -97,7 +98,8 @@ class Home extends React.Component {
   }
 
   render() {
-    const filteredData = dataByYear[this.state.year].filter(this._filterData);
+    const dataForYear = dataByYear[this.state.year];
+    const filteredData = dataForYear.filter(this._filterData);
 
     return (
       <div className="app-page">
@@ -115,13 +117,24 @@ class Home extends React.Component {
           <div
             className="app-chart"
             style={{padding: `0 0 ${PADDING_V}px ${PADDING_H}px`}}>
-            <SplitsChart {...this.state} data={filteredData} />
+            <SplitsChart
+              {...this.state}
+              data={filteredData}
+              medianTime={d3.median(
+                dataForYear,
+                d => d.finishTime || 30 * SEC_PER_HOUR
+              )}
+            />
           </div>
           <div
             className="app-sidebar"
             ref={i => this._sidebar = i}
             style={{width: `${SIDEBAR_WIDTH}px`}}>
-            {filteredData.map(data => <Runner {...data} key={data.bib} />)}
+            {filteredData.map(data => (
+              // Gordy and Cowman apparently both get bib #0, so add first name
+              // to the key to create a unique identifier.
+              <Runner {...data} key={`${data.bib}-${data.firstName}`} />
+            ))}
           </div>
         </div>
       </div>
@@ -220,4 +233,4 @@ class Home extends React.Component {
   }
 }
 
-export default Home;
+export default Main;

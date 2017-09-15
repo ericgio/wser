@@ -16,7 +16,7 @@ const TIME_MIN = 0;
 
 class SplitsChart extends React.Component {
   render() {
-    const {data, height, margin, width, year} = this.props;
+    const {data, height, margin, medianTime, width, year} = this.props;
     const innerHeight = getInnerHeight(height, margin);
     const innerWidth = getInnerWidth(width, margin);
 
@@ -68,8 +68,21 @@ class SplitsChart extends React.Component {
           tickFormat={seconds => secondsToTime(seconds)}
           tickValues={yTickValues}
         />
+        <g className="median-time">
+          <text transform={translate(5, y(medianTime) - 5)}>
+            Median Time: {secondsToTime(medianTime)}
+          </text>
+          <Line
+            data={[
+              {distance: DISTANCE_MIN, duration: medianTime},
+              {distance: DISTANCE_MAX, duration: medianTime},
+            ]}
+            x={d => x(d.distance)}
+            y={d => y(d.duration)}
+          />
+        </g>
         <Line
-          className="silver-buckle-cutoff"
+          className="silver-buckle-time"
           data={[
             {distance: DISTANCE_MIN, duration: SILVER_BUCKLE_TIME},
             {distance: DISTANCE_MAX, duration: SILVER_BUCKLE_TIME},
@@ -80,7 +93,7 @@ class SplitsChart extends React.Component {
         {data.map(row => (
           <g
             className={cx('runner-line', row.gender.toLowerCase())}
-            key={row.bib}>
+            key={`${row.bib}-${row.firstName}-line`}>
             <Line
               data={row.splits}
               x={d => x(d.distance)}
