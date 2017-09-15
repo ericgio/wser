@@ -7,7 +7,7 @@ import React from 'react';
 
 import secondsToTime from '../../utils/secondsToTime';
 
-import {AID_STATIONS, SEC_PER_HR, SILVER_BUCKLE_TIME} from '../../constants';
+import {AID_STATIONS, SEC_PER_HR} from '../../constants';
 
 const DISTANCE_MAX = 100.2;
 const DISTANCE_MIN = 0;
@@ -81,15 +81,6 @@ class SplitsChart extends React.Component {
             y={d => y(d.duration)}
           />
         </g>
-        <Line
-          className="silver-buckle-time"
-          data={[
-            {distance: DISTANCE_MIN, duration: SILVER_BUCKLE_TIME},
-            {distance: DISTANCE_MAX, duration: SILVER_BUCKLE_TIME},
-          ]}
-          x={d => x(d.distance)}
-          y={d => y(d.duration)}
-        />
         {data.map(row => (
           <g
             className={cx('runner-line', row.gender.toLowerCase())}
