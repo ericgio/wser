@@ -31,6 +31,14 @@ AS_2017.splice(18, 2,
   {distance: 94.3, name: 'Pointed Rocks'}
 );
 
+const AS_2011 = [...AID_STATIONS_BASE];
+AS_2011.splice(1, 2,
+  {distance: 10.3, name: 'Talbot Creek'},
+  {distance: 15.8, name: 'Poppy Trailhead'}
+);
+AS_2011.splice(4, 1, {distance: 30.3, name: 'Mosquito Ridge'});
+
+
 const AID_STATIONS = {
   '2017': AS_2017,
   '2016': AID_STATIONS_BASE,
@@ -38,6 +46,7 @@ const AID_STATIONS = {
   '2014': AID_STATIONS_BASE,
   '2013': AID_STATIONS_BASE,
   '2012': AID_STATIONS_BASE,
+  '2011': AID_STATIONS_BASE,
 };
 
 const GENDER = {
