@@ -51,6 +51,10 @@ body {
   font-size: 11px;
   padding: 15px;
 }
+.runner:hover {
+  background-color: #f5fcff;
+  cursor: pointer;
+}
 
 .runner.media {
   margin: 0;
@@ -87,11 +91,14 @@ body {
 
 .runner-line .line {
   stroke: #34ace4;
+  stroke-linecap: round;
   stroke-opacity: 0.2;
 }
-.runner-line .line:hover {
+.runner-line .line:hover,
+.runner-line.active .line {
   cursor: pointer;
   stroke-opacity: 1;
+  stroke-width: 2px;
 }
 .runner-line.f .line {
   stroke: #dd0447;

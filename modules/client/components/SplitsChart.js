@@ -16,7 +16,7 @@ const TIME_MIN = 0;
 
 class SplitsChart extends React.Component {
   render() {
-    const {data, height, margin, medianTime, width, year} = this.props;
+    const {active, data, height, margin, medianTime, width, year} = this.props;
     const innerHeight = getInnerHeight(height, margin);
     const innerWidth = getInnerWidth(width, margin);
 
@@ -81,12 +81,19 @@ class SplitsChart extends React.Component {
             y={d => y(d.duration)}
           />
         </g>
-        {data.map(row => (
+        {data.map(r => (
           <g
-            className={cx('runner-line', row.gender.toLowerCase())}
-            key={`${row.bib}-${row.firstName}-line`}>
+            className={cx('runner-line', r.gender.toLowerCase(), {
+              'active': (
+                active &&
+                active.bib === r.bib &&
+                // Stupid hack since Gordy and Cowman have the same bib...
+                active.firstName === r.firstName
+              ),
+            })}
+            key={`${r.bib}-${r.firstName}-line`}>
             <Line
-              data={row.splits}
+              data={r.splits}
               x={d => x(d.distance)}
               y={d => y(d.duration)}
             />

@@ -12,6 +12,7 @@ import secondsToTime from '../../utils/secondsToTime';
 import {GENDER, SEC_PER_HOUR, SILVER_BUCKLE_TIME} from '../../constants';
 
 const INITIAL_STATE = {
+  active: null,
   finishType: {
     all: true,
     dnf: false,
@@ -62,7 +63,10 @@ const Runner = ({finishTime, ...props}) => {
   }
 
   return (
-    <Media className="runner">
+    <Media
+      className="runner"
+      onMouseOut={props.onMouseOut}
+      onMouseOver={props.onMouseOver}>
       <Media.Left>{place}</Media.Left>
       <Media.Body>
         <h4 className="clearfix">
@@ -133,7 +137,12 @@ class Main extends React.Component {
             {filteredData.map(data => (
               // Gordy and Cowman apparently both get bib #0, so add first name
               // to the key to create a unique identifier.
-              <Runner {...data} key={`${data.bib}-${data.firstName}`} />
+              <Runner
+                {...data}
+                key={`${data.bib}-${data.firstName}`}
+                onMouseOver={e => this._handleRunnerMouseOver(e, data)}
+                onMouseOut={e => this.setState({active: null})}
+              />
             ))}
           </div>
         </div>
@@ -233,6 +242,12 @@ class Main extends React.Component {
     const width = parentNode.offsetWidth - SIDEBAR_WIDTH - PADDING_H;
 
     this.setState({height, width});
+  }
+
+  _handleRunnerMouseOver = (e, data) => {
+    if (this.state.active !== data.bib) {
+      this.setState({active: data});
+    }
   }
 }
 

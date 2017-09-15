@@ -6,6 +6,7 @@ const FINISH_TYPES = ['All', 'Top Ten', 'Silver Buckle', 'Finisher', 'DNF'];
 class Toolbar extends React.Component {
   render() {
     const {
+      active,
       finishType,
       gender,
       height,
