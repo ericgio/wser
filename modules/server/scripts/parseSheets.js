@@ -12,7 +12,10 @@ const {AID_STATIONS, GENDER} = require('../../constants');
 const DATA_ROW_START = 2;
 const SPLIT_COL_START = 10;
 const WSER_SHEET_ID = '1qdx6dxAkMOdqDf6SEZMueEJSbEegmqhY6SYLSAh5tNY';
-const YEAR = '2017';
+
+// Pass the year to parse in as an argument. This assumes the year is thr last
+// arg, ie: `npm run data -- 2017`. Anything else will break.
+const year = process.argv.pop();
 
 // Load client secrets from a local file.
 fs.readFile('google_secret.json', (err, content) => (
@@ -24,7 +27,7 @@ function parseData(auth) {
   const settings = {
     auth,
     spreadsheetId: WSER_SHEET_ID,
-    range: YEAR,
+    range: year,
   };
 
   sheets.spreadsheets.values.get(settings, (err, response) => {
@@ -43,7 +46,7 @@ function parseData(auth) {
 
     // Write data to file.
     fs.writeFileSync(
-      'modules/client/data/' + YEAR + '.json',
+      'modules/client/data/' + year + '.json',
       JSON.stringify(data)
     );
   });
@@ -63,7 +66,7 @@ function parseSheet(rows) {
     for (let jj = SPLIT_COL_START; jj < row.length; jj+=2) {
       let index = (jj - SPLIT_COL_START) / 2;
 
-      let aidStation = AID_STATIONS[YEAR][index];
+      let aidStation = AID_STATIONS[year][index];
 
       // Parse the value to get a valid time.
       let time = row[jj].split('-').filter(t => t && t !== ':').pop();
