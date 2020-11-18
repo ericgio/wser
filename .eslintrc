@@ -1,19 +1,15 @@
 {
-  "parser": "babel-eslint",
-  "plugins": [
-    "import",
-    "react"
-  ],
   "env": {
+    "browser": true,
     "es6": true,
     "node": true
   },
   "extends": [
-    "ericgio",
+    "@ericgio/eslint-config-react"
   ],
-  "settings": {
-    "import/resolver": "webpack"
-  },
+  "parser": "babel-eslint",
   "rules": {
+    "react/jsx-fragments": "off",
+    "sort-keys": "off"
   }
 }

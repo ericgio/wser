@@ -6,7 +6,7 @@ function timeToSeconds(time) {
   return time
     .split(':')
     .reverse()
-    .reduce((seconds, value, idx) => seconds + value * Math.pow(60, idx), 0);
+    .reduce((seconds, value, idx) => seconds + value * (60 ** idx), 0);
 }
 
 module.exports = timeToSeconds;
